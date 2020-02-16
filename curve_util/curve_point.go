@@ -1,7 +1,9 @@
-package curve_utilities
+package curve_util
 
 import (
-	C25519 "github.com/phvietan/ancrypto/curve_utilities/curve25519"
+	"encoding/hex"
+
+	C25519 "github.com/phvietan/ancrypto/curve_util/curve25519"
 )
 
 type Point struct {
@@ -89,4 +91,38 @@ func (this *Point) Reset() {
 
 func (this *Point) GetKey() C25519.Key {
 	return this.keys
+}
+
+func (this *Point) ToBytes() [C25519.KeyLength]byte {
+	return [C25519.KeyLength]byte(this.keys)
+}
+
+func (this *Point) ToBytesS() []byte {
+	b := this.keys.ToBytes()
+	return b[:]
+}
+
+func (this *Point) ToHex() string {
+	b := this.ToBytesS()
+	return hex.EncodeToString(b)
+}
+
+func FromBytesToPoint(b [C25519.KeyLength]byte) *Point {
+	result := new(Point)
+	result.keys = b
+	return result
+}
+
+func FromBytesSToPoint(b []byte) *Point {
+	for len(b) < 32 {
+		b = append(b, 0)
+	}
+	result := new(Point)
+	copy(b, result.keys[:])
+	return result
+}
+
+func FromHexToPoint(s string) *Point {
+	byteSlice, _ := hex.DecodeString(s)
+	return FromBytesSToPoint(byteSlice)
 }

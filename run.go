@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	utilities "github.com/phvietan/ancrypto/curve_utilities"
+	curve_util "github.com/phvietan/ancrypto/curve_util"
 )
 
 func main() {
 	fmt.Println("Running run")
-	randPoint := utilities.RandomPointOnBase()
+	randPoint := curve_util.RandomPointOnBase()
 	fmt.Println(randPoint)
 }

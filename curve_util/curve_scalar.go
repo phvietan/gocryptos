@@ -1,7 +1,9 @@
-package curve_utilities
+package curve_util
 
 import (
-	C25519 "github.com/phvietan/ancrypto/curve_utilities/curve25519"
+	"encoding/hex"
+
+	C25519 "github.com/phvietan/ancrypto/curve_util/curve25519"
 )
 
 type Scalar struct {
@@ -81,4 +83,38 @@ func (this *Scalar) MulTo(a *Scalar) {
 		return
 	}
 	C25519.ScMul(&this.keys, &this.keys, &a.keys)
+}
+
+func (this *Scalar) ToBytes() [C25519.KeyLength]byte {
+	return [C25519.KeyLength]byte(this.keys)
+}
+
+func (this *Scalar) ToBytesS() []byte {
+	b := this.keys.ToBytes()
+	return b[:]
+}
+
+func (this *Scalar) ToHex() string {
+	b := this.ToBytesS()
+	return hex.EncodeToString(b)
+}
+
+func FromBytesToScalar(b [C25519.KeyLength]byte) *Scalar {
+	result := new(Scalar)
+	result.keys = b
+	return result
+}
+
+func FromBytesSToScalar(b []byte) *Scalar {
+	for len(b) < 32 {
+		b = append(b, 0)
+	}
+	result := new(Scalar)
+	copy(b, result.keys[:])
+	return result
+}
+
+func FromHexToScalar(s string) *Scalar {
+	byteSlice, _ := hex.DecodeString(s)
+	return FromBytesSToScalar(byteSlice)
 }
