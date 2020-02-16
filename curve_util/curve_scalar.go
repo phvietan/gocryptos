@@ -18,6 +18,10 @@ func (this *Scalar) SetKey(k C25519.Key) *Scalar {
 	return this
 }
 
+func (this *Scalar) GetKey() C25519.Key {
+	return this.keys
+}
+
 func RandomScalar() *Scalar {
 	sc := new(Scalar)
 	sc.keys = *C25519.RandomScalar()
@@ -67,6 +71,10 @@ func (this *Scalar) Reset() {
 		this = new(Scalar)
 	}
 	C25519.Sc_0(&this.keys)
+}
+
+func (this *Scalar) GetPublicKey() *Point {
+	return ScalarMultBase(this)
 }
 
 // Multiply 2 scalar and store to new pointer (a*b)

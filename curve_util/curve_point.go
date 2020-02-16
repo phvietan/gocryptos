@@ -6,10 +6,13 @@ import (
 	C25519 "github.com/phvietan/ancrypto/curve_util/curve25519"
 )
 
+const KeySize int = C25519.KeyLength
+
 type Point struct {
 	keys C25519.Key
 }
 
+// set bytes of point to k
 func (this *Point) SetKey(k C25519.Key) *Point {
 	if this == nil {
 		this = new(Point)
@@ -18,10 +21,15 @@ func (this *Point) SetKey(k C25519.Key) *Point {
 	return this
 }
 
+func (this *Point) GetKey() C25519.Key {
+	return this.keys
+}
+
 func (this *Point) Identity() *Point {
 	return this.SetKey(C25519.Identity)
 }
 
+// Random a point on a*G. Where a is arbitrary scalar
 func RandomPointOnBase() *Point {
 	sc := C25519.RandomScalar()
 
@@ -62,6 +70,7 @@ func SubNewPoint(a, b *Point) *Point {
 	return result
 }
 
+// Check if this point is identity
 func (this *Point) IsIdentity() bool {
 	return this.keys == C25519.Identity
 }
@@ -87,10 +96,6 @@ func HashToPoint(data []byte) *Point {
 // Reset pointer Point to Identity
 func (this *Point) Reset() {
 	this.SetKey(C25519.Identity)
-}
-
-func (this *Point) GetKey() C25519.Key {
-	return this.keys
 }
 
 func (this *Point) ToBytes() [C25519.KeyLength]byte {
