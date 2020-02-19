@@ -19,8 +19,12 @@ func (this *Ring) ToBytesS() []byte {
 	return b
 }
 
-func NewRandomRing(privateKey *util.Scalar, size int) (ring *Ring, pi int) {
-	ring = new(Ring)
+func (this *Ring) ToHex() string {
+	b := this.ToBytesS()
+	return hex.EncodeToString(b)
+}
+
+func NewRandomRing(privateKey *util.Scalar, size int) (ring Ring, pi int) {
 	pi = common.GetRandomToN(size)
 
 	keys := make([]util.Point, size)
@@ -33,9 +37,4 @@ func NewRandomRing(privateKey *util.Scalar, size int) (ring *Ring, pi int) {
 	}
 	ring.keys = keys
 	return
-}
-
-func (this *Ring) ToHex() string {
-	b := this.ToBytesS()
-	return hex.EncodeToString(b)
 }

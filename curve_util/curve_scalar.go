@@ -10,6 +10,8 @@ type Scalar struct {
 	keys C25519.Key
 }
 
+var EdwardsOrder *Scalar = new(Scalar).SetKey(C25519.CurveOrder())
+
 func (this *Scalar) SetKey(k C25519.Key) *Scalar {
 	if this == nil {
 		this = new(Scalar)
@@ -20,6 +22,10 @@ func (this *Scalar) SetKey(k C25519.Key) *Scalar {
 
 func (this *Scalar) GetKey() C25519.Key {
 	return this.keys
+}
+
+func (this *Scalar) IsZero() bool {
+	return C25519.ScIsZero(&this.keys)
 }
 
 func RandomScalar() *Scalar {
